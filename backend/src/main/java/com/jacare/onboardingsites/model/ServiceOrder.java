@@ -22,7 +22,7 @@ public class ServiceOrder {
     private Long id;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @Column(name = "technician_id")
+    @JoinColumn(name = "technician_id")
     private Technician technician;
 
     @Column
