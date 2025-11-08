@@ -1,7 +1,8 @@
 package com.jacare.onboardingsites.service;
 
 import com.jacare.onboardingsites.dto.Technician.TechnicianGetDTO;
-import com.jacare.onboardingsites.dto.Technician.TechnicianRegisterDTO;
+import com.jacare.onboardingsites.dto.Technician.TechnicianCreateDTO;
+import com.jacare.onboardingsites.dto.Technician.TechnicianUpdateDTO;
 import com.jacare.onboardingsites.model.ServiceOrder;
 import com.jacare.onboardingsites.model.Technician;
 import com.jacare.onboardingsites.repository.ServiceOrderRepository;
@@ -26,7 +27,7 @@ public class TechnicianService {
 
     // Cria serviço para receber requisição HTTP e registrar um novo técnico no banco de dados
     @Transactional
-    public boolean registerTechnician(TechnicianRegisterDTO request) {
+    public boolean registerTechnician(TechnicianCreateDTO request) {
         List<ServiceOrder> serviceOrders = new ArrayList<>();
 
         Technician technician = Technician.builder()
@@ -48,8 +49,29 @@ public class TechnicianService {
         return technicianGetDTOs;
     }
 
+    @Transactional
+    public boolean updateTechnician(TechnicianUpdateDTO request) {
+        Technician technician = technicianRepository.findById(request.id()).orElse(null);
+        if(technician == null) {
+            return false;
+        }
+        technician.setName(request.name());
+        technicianRepository.save(technician);
+        return true;
+    }
+
+    @Transactional
+    public boolean deleteTechnician(Long id){
+        if(technicianRepository.existsById(id)) {
+            technicianRepository.deleteById(id);
+            return true;
+        }
+        return false;
+    }
+
     private TechnicianGetDTO convertToGetDTO(Technician technician) {
         return new TechnicianGetDTO(technician.getId(), technician.getName());
-
     }
+
+
 }

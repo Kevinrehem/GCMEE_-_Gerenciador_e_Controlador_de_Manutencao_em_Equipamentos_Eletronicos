@@ -8,12 +8,7 @@ import org.springframework.stereotype.Repository;
 import org.springframework.web.bind.annotation.DeleteMapping;
 
 @Repository
-public interface EquipmentRepository extends JpaRepository<Equipment, Integer> {
-    @Modifying
-    void insert(Equipment equipment);
-
-    @Modifying
-    void update(Equipment equipment);
+public interface EquipmentRepository extends JpaRepository<Equipment, Long> {
 
     @Modifying
     @DeleteMapping

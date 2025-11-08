@@ -7,12 +7,7 @@ import org.springframework.stereotype.Repository;
 import org.springframework.web.bind.annotation.DeleteMapping;
 
 @Repository
-public interface ProcedureRepository extends JpaRepository<Procedure,Integer> {
-    @Modifying
-    void insert(Procedure Procedure);
-
-    @Modifying
-    void update(Procedure Procedure);
+public interface ProcedureRepository extends JpaRepository<Procedure,Long> {
 
     @Modifying
     @DeleteMapping

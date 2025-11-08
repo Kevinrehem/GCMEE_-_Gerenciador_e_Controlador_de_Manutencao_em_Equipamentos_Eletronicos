@@ -1,4 +1,4 @@
 package com.jacare.onboardingsites.dto.Technician;
 
-public record TechnicianRegisterDTO(String name) {
+public record TechnicianCreateDTO(String name) {
 }
