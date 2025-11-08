@@ -1,5 +1,6 @@
 package com.jacare.onboardingsites.service;
 
+import com.jacare.onboardingsites.dto.Technician.TechnicianGetDTO;
 import com.jacare.onboardingsites.dto.Technician.TechnicianRegisterDTO;
 import com.jacare.onboardingsites.model.ServiceOrder;
 import com.jacare.onboardingsites.model.Technician;
@@ -38,7 +39,17 @@ public class TechnicianService {
     }
 
     @Transactional
-    public List<Technician> findAllTechnicians() {
-        return technicianRepository.findAll();
+    public List<TechnicianGetDTO> findAllTechnicians() {
+        List<Technician> technicians = technicianRepository.findAll();
+        List<TechnicianGetDTO> technicianGetDTOs = new ArrayList<>();
+        for(Technician technician : technicians) {
+            technicianGetDTOs.add(convertToGetDTO(technician));
+        }
+        return technicianGetDTOs;
+    }
+
+    private TechnicianGetDTO convertToGetDTO(Technician technician) {
+        return new TechnicianGetDTO(technician.getId(), technician.getName());
+
     }
 }
