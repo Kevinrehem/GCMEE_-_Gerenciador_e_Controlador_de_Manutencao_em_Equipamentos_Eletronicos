@@ -26,10 +26,14 @@ public class ServiceOrder {
     @JoinColumn(name = "technician_id")
     private Technician technician;
 
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "equipment_id")
+    private Equipment equipment;
+
     @Column
     private Double price;
 
-    @ManyToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
+    @ManyToMany(fetch = FetchType.EAGER)
     private List<Procedure> procedureList;
 
     @Column

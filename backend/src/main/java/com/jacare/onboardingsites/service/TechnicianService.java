@@ -69,7 +69,7 @@ public class TechnicianService {
         return false;
     }
 
-    private TechnicianGetDTO convertToGetDTO(Technician technician) {
+    public TechnicianGetDTO convertToGetDTO(Technician technician) {
         return new TechnicianGetDTO(technician.getId(), technician.getName());
     }
 

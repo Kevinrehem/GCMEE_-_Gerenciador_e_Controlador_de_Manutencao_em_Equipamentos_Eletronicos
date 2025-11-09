@@ -1,4 +1,8 @@
 package com.jacare.onboardingsites.dto.ServiceOrder;
 
-public record ServiceOrderUpdateDTO() {
+import com.jacare.onboardingsites.model.enums.ServiceOrderStatus;
+
+import java.util.List;
+
+public record ServiceOrderUpdateDTO(Long id, Long technicianId, Long equipmentId, List<Long> procedureIds, ServiceOrderStatus serviceOrderStatus) {
 }

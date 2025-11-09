@@ -24,10 +24,10 @@ public class Procedure {
     @Column(nullable = false, unique = true)
     private String name;
 
-    @Column(nullable = false, unique = true)
+    @Column(nullable = false)
     private String description;
 
-    @Column(nullable = false, unique = true)
+    @Column(nullable = false)
     private Double price;
 
     @ManyToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER)

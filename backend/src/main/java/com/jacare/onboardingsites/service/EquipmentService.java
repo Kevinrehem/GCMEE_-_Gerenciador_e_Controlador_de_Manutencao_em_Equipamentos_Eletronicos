@@ -72,7 +72,7 @@ public class EquipmentService {
         return true;
     }
 
-    private EquipmentGetDTO convertToGetDTO(Equipment equipment) {
+    public EquipmentGetDTO convertToGetDTO(Equipment equipment) {
         return new  EquipmentGetDTO(equipment.getId(), equipment.getName(), equipment.getType(), customerService.convertCustomerToGetDTO(equipment.getOwner()));
     }
 
