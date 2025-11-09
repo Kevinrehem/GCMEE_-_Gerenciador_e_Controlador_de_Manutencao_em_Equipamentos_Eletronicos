@@ -1,5 +1,6 @@
 package com.jacare.onboardingsites.model;
 
+import com.jacare.onboardingsites.model.enums.ServiceOrderStatus;
 import jakarta.persistence.*;
 import lombok.*;
 
@@ -30,4 +31,7 @@ public class ServiceOrder {
 
     @ManyToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
     private List<Procedure> procedureList;
+
+    @Column
+    private ServiceOrderStatus status;
 }

@@ -21,19 +21,19 @@ public class Customer {
     @Column(nullable = false, unique = true,  updatable = false)
     private Long id;
 
-    @Column(nullable = false, updatable = false)
+    @Column(nullable = false)
     private String name;
 
-    @Column(nullable = false, updatable = false)
+    @Column(nullable = false)
     private String email;
 
-    @Column(nullable = false, updatable = false)
+    @Column(nullable = false)
     private String phoneNumber;
 
-    @Column(nullable = false, updatable = false)
+    @Column(nullable = false)
     @OneToMany(cascade = CascadeType.ALL)
     private List<Equipment> equipments;
 
-    @Column(nullable = false, updatable = false)
-    private Float debt;
+    @Column(nullable = false)
+    private Double debt;
 }
