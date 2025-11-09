@@ -1,16 +1,59 @@
+
+
+@plugin "tailwindcss-animate";
+
+@custom-variant dark (&:is(.dark *));
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
 :root {
   font-family: system-ui, Avenir, Helvetica, Arial, sans-serif;
-  line-height: 1.5;
+  line-height: 1.6;
   font-weight: 400;
 
-  color-scheme: light dark;
-  color: rgba(255, 255, 255, 0.87);
-  background-color: #242424;
+  color-scheme: dark;
+  color: #e8e7f3; /* foreground */
+  background-color: #0b0b10; /* deep background */
 
   font-synthesis: none;
   text-rendering: optimizeLegibility;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
+  --radius: 0.75rem;
+  /* Palette: dark greys and purple accents */
+  --background: #0b0b10; /* page background */
+  --foreground: #e6e6f6; /* main text */
+  --card: #0f1013; /* card background */
+  --card-foreground: #e6e6f6;
+  --popover: #121216;
+  --popover-foreground: #e6e6f6;
+  --primary: #7c3aed; /* purple */
+  --primary-foreground: #ffffff;
+  --secondary: #312e81;
+  --secondary-foreground: #ffffff;
+  --muted: #1b1b1f;
+  --muted-foreground: #a8a6b8;
+  --accent: #7c3aed;
+  --accent-foreground: #ffffff;
+  --destructive: #ef4444;
+  --border: rgba(255,255,255,0.06);
+  --input: rgba(255,255,255,0.04);
+  --ring: rgba(124,58,237,0.3);
+  --chart-1: #7c3aed;
+  --chart-2: #8b5cf6;
+  --chart-3: #4c1d95;
+  --chart-4: #6d28d9;
+  --chart-5: #9f7aea;
+  --sidebar: #0f0f13;
+  --sidebar-foreground: #e6e6f6;
+  --sidebar-primary: #7c3aed;
+  --sidebar-primary-foreground: #ffffff;
+  --sidebar-accent: #2a254a;
+  --sidebar-accent-foreground: #e6e6f6;
+  --sidebar-border: rgba(255,255,255,0.06);
+  --sidebar-ring: rgba(124,58,237,0.3);
 }
 
 a {
@@ -24,10 +67,12 @@ a:hover {
 
 body {
   margin: 0;
-  display: flex;
-  place-items: center;
+  display: block;
   min-width: 320px;
   min-height: 100vh;
+  background-color: var(--background);
+  color: var(--foreground);
+  -webkit-font-smoothing: antialiased;
 }
 
 h1 {
@@ -36,18 +81,20 @@ h1 {
 }
 
 button {
-  border-radius: 8px;
+  border-radius: 10px;
   border: 1px solid transparent;
   padding: 0.6em 1.2em;
   font-size: 1em;
-  font-weight: 500;
+  font-weight: 600;
   font-family: inherit;
-  background-color: #1a1a1a;
+  background-color: var(--card);
+  color: var(--card-foreground);
   cursor: pointer;
-  transition: border-color 0.25s;
+  transition: box-shadow 0.18s, transform 0.08s;
 }
 button:hover {
-  border-color: #646cff;
+  box-shadow: 0 6px 18px rgba(15,10,30,0.45);
+  transform: translateY(-1px);
 }
 button:focus,
 button:focus-visible {
@@ -65,4 +112,120 @@ button:focus-visible {
   button {
     background-color: #f9f9f9;
   }
+}
+
+@theme inline {
+  --radius-sm: calc(var(--radius) - 4px);
+  --radius-md: calc(var(--radius) - 2px);
+  --radius-lg: var(--radius);
+  --radius-xl: calc(var(--radius) + 4px);
+  --color-background: var(--background);
+  --color-foreground: var(--foreground);
+  --color-card: var(--card);
+  --color-card-foreground: var(--card-foreground);
+  --color-popover: var(--popover);
+  --color-popover-foreground: var(--popover-foreground);
+  --color-primary: var(--primary);
+  --color-primary-foreground: var(--primary-foreground);
+  --color-secondary: var(--secondary);
+  --color-secondary-foreground: var(--secondary-foreground);
+  --color-muted: var(--muted);
+  --color-muted-foreground: var(--muted-foreground);
+  --color-accent: var(--accent);
+  --color-accent-foreground: var(--accent-foreground);
+  --color-destructive: var(--destructive);
+  --color-border: var(--border);
+  --color-input: var(--input);
+  --color-ring: var(--ring);
+  --color-chart-1: var(--chart-1);
+  --color-chart-2: var(--chart-2);
+  --color-chart-3: var(--chart-3);
+  --color-chart-4: var(--chart-4);
+  --color-chart-5: var(--chart-5);
+  --color-sidebar: var(--sidebar);
+  --color-sidebar-foreground: var(--sidebar-foreground);
+  --color-sidebar-primary: var(--sidebar-primary);
+  --color-sidebar-primary-foreground: var(--sidebar-primary-foreground);
+  --color-sidebar-accent: var(--sidebar-accent);
+  --color-sidebar-accent-foreground: var(--sidebar-accent-foreground);
+  --color-sidebar-border: var(--sidebar-border);
+  --color-sidebar-ring: var(--sidebar-ring);
+}
+
+.dark {
+  /* keep dark values but align with the chosen palette */
+  --background: #0b0b10;
+  --foreground: #e6e6f6;
+  --card: #0f1013;
+  --card-foreground: #e6e6f6;
+  --popover: #121216;
+  --popover-foreground: #e6e6f6;
+  --primary: #7c3aed;
+  --primary-foreground: #ffffff;
+  --secondary: #312e81;
+  --secondary-foreground: #ffffff;
+  --muted: #141418;
+  --muted-foreground: #9a98ab;
+  --accent: #7c3aed;
+  --accent-foreground: #ffffff;
+  --destructive: #ef4444;
+  --border: rgba(255,255,255,0.06);
+  --input: rgba(255,255,255,0.04);
+  --ring: rgba(124,58,237,0.28);
+  --sidebar: #0f0f13;
+  --sidebar-foreground: #e6e6f6;
+  --sidebar-primary: #7c3aed;
+  --sidebar-primary-foreground: #ffffff;
+  --sidebar-accent: #2a254a;
+  --sidebar-accent-foreground: #e6e6f6;
+  --sidebar-border: rgba(255,255,255,0.06);
+  --sidebar-ring: rgba(124,58,237,0.28);
+}
+
+/* Wider container by default to occupy more screen */
+.container {
+  max-width: 1400px;
+  width: calc(100% - 2.5rem);
+  margin-left: auto;
+  margin-right: auto;
+  padding-left: 1.25rem;
+  padding-right: 1.25rem;
+}
+
+/* Utility to space children proportionally */
+.spacious > * + * {
+  margin-top: 1.25rem;
+}
+
+/* Make forms and tables breathe more */
+.form-row > * + * {
+  margin-left: 1rem;
+}
+
+/* Improve table visuals */
+.table-shadow {
+  box-shadow: 0 8px 30px rgba(2,6,23,0.6);
+  border-radius: 8px;
+  overflow: hidden;
+}
+
+@layer base {
+  * {
+    @apply border-border outline-ring/50;
+  }
+  body {
+    @apply bg-background text-foreground;
+  }
+}
+
+/* Make native select options readable when opened (force dark-on-light for dropdown list) */
+select,
+select option {
+  color: #000 !important;
+  background-color: #fff !important;
+}
+
+/* Ensure select elements show black text by default too (helpful in some browsers/themes) */
+select {
+  color: #000;
 }
