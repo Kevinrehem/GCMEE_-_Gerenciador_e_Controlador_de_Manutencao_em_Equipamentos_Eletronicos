@@ -38,7 +38,7 @@ O backend implementa uma API REST com operações CRUD para as entidades mencion
 
 - Model: representa a entidade persistida.
 - DTOs: objetos para comunicação (criação, retorno e atualização).
-- Repository: abstração de acesso a dados (provavelmente usando Spring Data JPA).
+- Repository: abstração de acesso a dados (usando Spring Data JPA).
 - Service: contém regras de negócio e validações.
 - Controller: expõe endpoints HTTP para o frontend consumir.
 
@@ -114,7 +114,7 @@ Os controllers implementam endpoints REST conforme padrão comum. Exemplo de rot
 Você pode testar usando o curl, Postman ou uma extensão REST no VS Code. Exemplo com curl (PowerShell):
 
 ```powershell
-curl.exe -Method Get http://localhost:8080/api/customers
+curl.exe -Method Get http://localhost:8081/api/customers
 ```
 
 Obs: o caminho exato (`/api/...`) deve ser confirmado nos arquivos dos controllers caso tenha sido usado outro prefixo.
