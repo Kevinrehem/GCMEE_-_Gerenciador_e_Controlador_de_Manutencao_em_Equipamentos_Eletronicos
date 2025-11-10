@@ -13,19 +13,18 @@ Este repositório contém duas partes principais:
 - Maven (wrapper incluído: `mvnw` / `mvnw.cmd`)
 ## GCMEE — Gerenciador de Chamados Técnicos (documentação de execução e API)
 
-Este repositório contém um sistema simples de gerenciamento de manutenção: backend em Spring Boot (Java + Maven) e frontend em React (Vite). Abaixo estão instruções claras de execução (incluindo o `start_app.bat`), indicação de onde configurar a conexão com o banco e a documentação completa dos endpoints do backend com exemplos JSON.
+Este repositório contém um sistema simples de gerenciamento de manutenção: backend em Spring Boot (Java + Maven) e frontend em React (Vite). Abaixo estão instruções claras de execução (incluindo o `Start_GCMEE.bat`), indicação de onde configurar a conexão com o banco e a documentação completa dos endpoints do backend com exemplos JSON.
 
 Links importantes
-- Configuração da aplicação (altere conforme necessário): `backend/src/main/resources/application.properties`
-- Script de criação do banco (use antes de rodar, se necessário): `DatabaseCreationScript.sql`
+- [Configuração da aplicação](./backend/src/main/resources/application.properties)
+- [Script de criação do banco](./DatabaseCreationScript.sql) (use antes de rodar, se necessário)
 
-OBS: não comite senhas reais em repositórios públicos. Use placeholders e informe como preencher os dados antes de executar.
 
-## Execução automática (arquivo `start_app.bat`)
+## Execução automática (arquivo `Start_GCMEE.bat`)
 
-O arquivo `start_app.bat` na raiz do projeto abre duas janelas do Windows: uma para o backend (executando o JAR) e outra para o frontend (`npm run dev`).
+O arquivo `Start_GCMEE.bat` na raiz do projeto abre duas janelas do Windows: uma para o backend (executando o JAR) e outra para o frontend (`npm run dev`).
 
-Antes de usar `start_app.bat`, faça estes passos obrigatórios (ordem recomendada):
+Antes de usar `Start_GCMEE.bat`, faça estes passos obrigatórios (ordem recomendada):
 
 1) Preparar o banco de dados
    - Rode o script `DatabaseCreationScript.sql` no servidor escolhido (laboratório ou casa) dentro do database `aula` — este arquivo está na raiz do repositório: `DatabaseCreationScript.sql`.
@@ -34,7 +33,7 @@ Antes de usar `start_app.bat`, faça estes passos obrigatórios (ordem recomenda
 2) Ajustar configuração do backend
    - Edite `backend/src/main/resources/application.properties` e preencha as propriedades de conexão (url, username, password) e, se quiser, a porta do servidor (`server.port`).
 
-3) Gerar o JAR do backend (necessário para `start_app.bat`)
+3) Gerar o JAR do backend (necessário para `Start_GCMEE.bat`)
    - No PowerShell (na raiz do projeto):
 
 ```powershell
@@ -52,15 +51,15 @@ cd frontend
 npm install
 ```
 
-5) Executar o `start_app.bat`
+5) Executar o `Start_GCMEE.bat`
    - Voltando para a raiz do projeto:
 
 ```powershell
 cd ..\
-.\start_app.bat
+.\Start_GCMEE.bat
 ```
 
-Observações sobre `start_app.bat`:
+Observações sobre `Start_GCMEE.bat`:
 - Ele chama `java -jar target/onboardingsites-0.0.1-SNAPSHOT.jar` dentro da pasta `backend` — portanto, o JAR precisa existir antes.
 - Ele também chama `npm run dev` dentro da pasta `frontend` — por isso é necessário executar `npm install` antes.
 
@@ -333,13 +332,3 @@ Exemplo — criar procedimento (PowerShell + JSON):
 ```powershell
 curl.exe -Method Post -Body '{"name":"Troca de HD","description":"...","price":250}' -Headers @{"Content-Type"="application/json"} http://localhost:8081/app/procedure/create
 ```
-
-## Resumo das mudanças e verificação
-
-- Atualizei este `README.md` para incluir um método de execução automático via `start_app.bat`, instruções claras sobre porta/variáveis de ambiente, passo-a-passo de uso do frontend e documentação completa dos endpoints do backend com exemplos JSON. Os links para `backend/src/main/resources/application.properties` e `DatabaseCreationScript.sql` foram mantidos.
-
-Se quiser, eu posso:
-- Gerar um `frontend/.env.example` com `VITE_API_BASE` já apontando para o valor de `application.properties`.
-- Criar um `backend/src/main/resources/application.properties.example` com placeholders para não expor credenciais reais.
-
-— Fim da documentação atualizada —
