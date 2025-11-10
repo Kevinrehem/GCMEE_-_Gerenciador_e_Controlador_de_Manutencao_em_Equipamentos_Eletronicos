@@ -1,6 +1,6 @@
 ## GCMEE - Gerenciador e Controlador de Manutenção em Equipamentos Eletrônicos 🚀
 
-Projeto de exemplo (backend em Spring Boot + frontend com Vite) usado para gerenciamento de site de onboarding.
+Projeto de exemplo (backend em Spring Boot + frontend com Vite) usado para gerenciamento de manutenção em equipamentos eletronicos através de OS e procedimentos que podem ser executadas em equipamentos de clientes cadastrados pelo usuário.
 
 Este repositório contém duas partes principais:
 
