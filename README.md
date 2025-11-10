@@ -11,229 +11,335 @@ Este repositório contém duas partes principais:
 
 - Java 21 e Spring Boot
 - Maven (wrapper incluído: `mvnw` / `mvnw.cmd`)
-- Node.js + npm (para o frontend)
-- Vite + React
+## GCMEE — Gerenciador de Chamados Técnicos (documentação de execução e API)
 
-Obs: use Java 21 e Node 16+ para melhor compatibilidade.
+Este repositório contém um sistema simples de gerenciamento de manutenção: backend em Spring Boot (Java + Maven) e frontend em React (Vite). Abaixo estão instruções claras de execução (incluindo o `start_app.bat`), indicação de onde configurar a conexão com o banco e a documentação completa dos endpoints do backend com exemplos JSON.
 
-## Estrutura do projeto (resumo) 📁
+Links importantes
+- Configuração da aplicação (altere conforme necessário): `backend/src/main/resources/application.properties`
+- Script de criação do banco (use antes de rodar, se necessário): `DatabaseCreationScript.sql`
 
-- `backend/`
-  - `pom.xml` — configuração Maven
-  - `src/main/java/com/jacare/onboardingsites/` — código fonte Java
-    - `controller/` — endpoints REST (CustomerController, EquipmentController, ProcedureController, ServiceOrderController, TechnicianController)
-    - `dto/` — objetos de transferência (Create/Get/Update DTOs por entidade)
-    - `model/` — entidades do domínio (Customer, Equipment, Procedure, ServiceOrder, Technician)
-    - `repository/` — interfaces Spring Data JPA
-    - `service/` — lógica de negócio
-  - `src/main/resources/application.properties` — configuração da aplicação (porta, datasource, etc.)
+OBS: não comite senhas reais em repositórios públicos. Use placeholders e informe como preencher os dados antes de executar.
 
-- `frontend/`
-  - `package.json` — dependências e scripts
-  - `index.html`, `src/` — app React
+## Execução automática (arquivo `start_app.bat`)
 
-## Visão geral do que o código faz 🔍
+O arquivo `start_app.bat` na raiz do projeto abre duas janelas do Windows: uma para o backend (executando o JAR) e outra para o frontend (`npm run dev`).
 
-O backend implementa uma API REST com operações CRUD para as entidades mencionadas. Cada entidade tem:
+Antes de usar `start_app.bat`, faça estes passos obrigatórios (ordem recomendada):
 
-- Model: representa a entidade persistida.
-- DTOs: objetos para comunicação (criação, retorno e atualização).
-- Repository: abstração de acesso a dados (usando Spring Data JPA).
-- Service: contém regras de negócio e validações.
-- Controller: expõe endpoints HTTP para o frontend consumir.
+1) Preparar o banco de dados
+   - Rode o script `DatabaseCreationScript.sql` no servidor escolhido (laboratório ou casa) dentro do database `aula` — este arquivo está na raiz do repositório: `DatabaseCreationScript.sql`.
+   - Ajuste, se desejar, para criar um schema com seu usuário.
 
-O frontend consome esses endpoints e apresenta a interface para criar, listar e editar registros.
+2) Ajustar configuração do backend
+   - Edite `backend/src/main/resources/application.properties` e preencha as propriedades de conexão (url, username, password) e, se quiser, a porta do servidor (`server.port`).
 
-## Rodando localmente (Windows PowerShell) ⚙️
-
-Recomendações: abra o PowerShell com a pasta do projeto como diretório atual.
-
-Backend (desenvolvimento):
-
-```powershell
-cd backend
-.\mvnw.cmd spring-boot:run
-```
-
-Isso compilará e iniciará a API. Se preferir empacotar em um JAR e executar:
+3) Gerar o JAR do backend (necessário para `start_app.bat`)
+   - No PowerShell (na raiz do projeto):
 
 ```powershell
 cd backend
 .\mvnw.cmd clean package -DskipTests
-java -jar target\*.jar
 ```
 
-Para rodar os testes unitários:
+   - Após o `package`, o JAR estará em `backend/target/` (por exemplo `onboardingsites-0.0.1-SNAPSHOT.jar`).
 
-```powershell
-cd backend
-.\mvnw.cmd test
-```
-
-Frontend (desenvolvimento):
+4) Instalar dependências do frontend
+   - Ainda no PowerShell:
 
 ```powershell
 cd frontend
 npm install
-npm run dev
 ```
 
-Frontend (build para produção):
+5) Executar o `start_app.bat`
+   - Voltando para a raiz do projeto:
 
 ```powershell
-cd frontend
-npm run build
-# O resultado ficará em `dist/` (serve com um servidor static ou configure integração com o backend)
+cd ..\
+.\start_app.bat
 ```
 
-## Configurações importantes 🔧
+Observações sobre `start_app.bat`:
+- Ele chama `java -jar target/onboardingsites-0.0.1-SNAPSHOT.jar` dentro da pasta `backend` — portanto, o JAR precisa existir antes.
+- Ele também chama `npm run dev` dentro da pasta `frontend` — por isso é necessário executar `npm install` antes.
 
-Edite `backend/src/main/resources/application.properties` para ajustar porta, datasource, credenciais ou outras propriedades.
+Alternativas (modo desenvolvimento):
+- Rodar o backend direto com o Maven (mais conveniente durante desenvolvimento):
 
-Exemplos típicos de propriedades que podem existir:
-
-- `server.port=8081`
-- `spring.datasource.url=jdbc:...`
-- `spring.jpa.hibernate.ddl-auto=update`
-
-Se você alterar a porta do backend, atualize também o endereço usado pelo frontend para as requisições HTTP (ver `src` do frontend).
-
-## Padrão de endpoints (API) — exemplo 🔗
-
-Os controllers implementam endpoints REST conforme padrão comum. Exemplo de rotas esperadas (ajuste conforme os RequestMappings do projeto):
-
-- Customers
-  - GET  /api/customers        — listar todos
-  - GET  /api/customers/{id}   — obter por id
-  - POST /api/customers        — criar
-  - PUT  /api/customers/{id}   — atualizar
-  - DELETE /api/customers/{id} — remover
-
-- Equipments, Procedures, Technicians, ServiceOrders seguem um padrão similar em `/api/{resource}`.
-
-Você pode testar usando o curl, Postman ou uma extensão REST no VS Code. Exemplo com curl (PowerShell):
-
-```powershell
-curl.exe -Method Get http://localhost:8081/api/customers
-```
-
-Obs: o caminho exato (`/api/...`) deve ser confirmado nos arquivos dos controllers caso tenha sido usado outro prefixo.
-
-## Arquitetura & fluxos 🧭
-
-- Controller -> Service -> Repository -> Database
-- DTOs são usados para separar a camada de exposição (API) do modelo de domínio.
-
-Isso facilita validação, testes e evolução de API sem expor diretamente as entidades JPA.
-
-## Sugestões de comentários no código (em Português) 💬
-
-Adicione comentários claros e curtos nas classes e métodos importantes. Exemplos que você pode inserir nos arquivos `controller`, `service` e `model`:
-
-Controller (exemplo genérico):
-
-```java
-// Controller responsável por expor os endpoints REST para a entidade Customer.
-// Recebe DTOs, delega a lógica ao Service e retorna respostas HTTP apropriadas.
-# Trabalho: Sistema CRUD — Controle de Chamados Técnicos (modelo adaptado)
-
-Este repositório contém um projeto completo com backend (Spring Boot) e frontend (React + Vite) que já está estruturado para um sistema do tipo "Controle de Chamados Técnicos" — tema escolhido para adaptar o exercício solicitado (baseado no modelo do projeto "cadAluno_atual").
-
-O objetivo deste README é orientar a entrega do exercício acadêmico descrito: criar um sistema CRUD seguindo a mesma estrutura do projeto de referência, com banco de dados relacional no servidor de laboratório/casa e documentação/arquivo SQL para criação das tabelas.
-
-Resumo do tema escolhido
-- Tema: Controle de Chamados Técnicos
-- Entidades principais (exemplo de modelagem):
-  - Technician (técnico) — id, name, contact
-  - Equipment (equipamento) — id, name, equip_type, owner_id (FK -> customer / owner)
-  - ServiceOrder (chamado) — id, price, technician_id (FK -> Technician), equipment_id (FK -> Equipment), status
-  - Procedure (procedimento/exame) — id, name, description, price
-  - Customer (opcional) — id, name, email, phoneNumber (dono do equipamento)
-
-Relações mínimas exigidas: pelo menos duas entidades relacionadas (por exemplo: ServiceOrder -> Technician e ServiceOrder -> Equipment). A modelagem acima já atende esse requisito.
-
-Requisitos de entrega (resumido)
-- O projeto deve conter frontend e backend (estrutura igual ao modelo `cadAluno_atual`).
-- Deve implementar operações CRUD (Create, Read, Update, Delete) para as entidades.
-- O banco de dados relacional deve ser criado no servidor especificado e dentro do database `aula` em um schema com o seu nome de usuário.
-- Devem ser incluídos:
-  - Script SQL para criação das tabelas e seeds (arquivo: `backend/db/<seu_usuario>_schema.sql`).
-  - Código-fonte do sistema (todo o diretório do projeto — frontend e backend).
-  - Arquivo de configuração com as credenciais de conexão (padrão: `backend/src/main/resources/application.properties`) — não coloque credenciais sensíveis em repositório público, use placeholders e comente como preencher.
-  - Documento explicativo curto (README.txt ou README_entrega.md) descrevendo o tema, entidades e como executar o sistema.
-
-Detalhes do banco de dados (servidores)
-- Servidor (laboratório): 10.90.24.54
-- Servidor (casa): 200.18.128.54
-
-Observação: o banco deve ser criado dentro do database `aula`. Dentro de `aula` crie um schema (ou owner) com o seu nome de usuário. Exemplo (substituir <usuario> pelos seus dados):
-
--- [Criação do schema (PostgreSQL)](./DatabaseCreationScript.sql)
--- CREATE SCHEMA IF NOT EXISTS "<usuario>";
--- SET search_path TO "<usuario>", public;
-
-Importante: o Spring Boot (via JPA/Hibernate) pode criar ou atualizar automaticamente as tabelas a partir das entidades Java quando a aplicação for iniciada (dependendo do valor de `spring.jpa.hibernate.ddl-auto`, por exemplo `update` ou `create`). No entanto, isso só funciona se o database `aula` e o schema/usuário já existirem no servidor e as credenciais em `application.properties` tiverem permissão para criar/alterar objetos no schema. Por isso incluímos o script de criação rápido acima — [DatabaseCreationScript.sql](./DatabaseCreationScript.sql) — para garantir que o banco e o schema existam antes de rodar a aplicação.
-
-
-Exemplo de conteúdo do script (resumo):
--- Tabelas: technician, equipment, procedure, service_order, customer
--- Chaves estrangeiras entre service_order.technician_id -> technician.id e service_order.equipment_id -> equipment.id
--- Tipos e constraints básicos (NOT NULL, UNIQUE quando aplicável)
-
-Requisitos técnicos e arquivos obrigatórios
-- Estrutura: manter a mesma organização (backend/ com Maven + src; frontend/ com Vite + src).
-- Scripts SQL: `backend/db/<usuario>_schema.sql` (obrigatório)
-- Configuração de conexão: `backend/src/main/resources/application.properties` (usar placeholders ou instruções para substituir host/port/db/user/password). Exemplo de propriedades:
-```
-spring.datasource.url=jdbc:postgresql://10.90.24.54:5432/aula
-spring.datasource.username=<usuario>
-spring.datasource.password=<senha>
-spring.jpa.hibernate.ddl-auto=validate
-```
-
-- README_entrega.md (ou README.txt): explicar o tema, entidades, relacionamentos e passos para executar (criar schema, executar script SQL, iniciar backend e frontend).
-
-Como rodar o projeto (resumo) — instruções locais
-1. Configurar o banco de dados no servidor (usar o script `backend/db/<usuario>_schema.sql`).
-2. Atualizar `backend/src/main/resources/application.properties` com os dados do servidor e credenciais.
-3. Iniciar backend (Windows PowerShell):
 ```powershell
 cd backend
 .\mvnw.cmd spring-boot:run
 ```
-4. Iniciar frontend:
+
+- Rodar o frontend diretamente (após `npm install`):
+
 ```powershell
 cd frontend
-npm install
 npm run dev
 ```
-5. Acessar o frontend (porta informada pelo Vite) e testar operações CRUD nas páginas.
 
-Observações de segurança
-- Não comite senhas reais no repositório. Use placeholders no arquivo `application.properties` e inclua um `application.properties.example` com instruções.
+## Observações sobre porta / URL do backend usada pelo frontend
 
-Formato da entrega (.zip)
-- Compacte a pasta do projeto, incluindo:
-  - pasta do projeto (completo)
-  - script SQL (`backend/db/<usuario>_schema.sql`)
-  - documento explicativo (`README_entrega.md`)
-- Nome do arquivo final:
-  - `nome_sobrenome_tema.zip` (por exemplo: `joao_silva_controle_chamados.zip`)
+O frontend uses a variável `VITE_API_BASE` (arquivo `.env` ou variáveis de ambiente) para montar as chamadas HTTP. Por padrão o código contém:
 
-Critérios de avaliação
-- Estrutura e organização do projeto — 30%
-- Correção e funcionalidade das operações CRUD — 30%
-- Qualidade da modelagem e consistência do banco de dados — 25%
-- Clareza da documentação e apresentação do tema — 15%
+- Valor default: `http://localhost:8080` (arquivo: `frontend/src/services/api.js`)
+- O `application.properties` do backend neste repositório usa por padrão `server.port=8081`.
 
-Boas práticas e recomendações
-- Comentários: comente controladores, serviços e modelos explicando propósito e contratos (inputs/outputs).
-- Validações: use `@Valid` e anotações do Bean Validation para entradas de API.
-- Migrations (opcional): adicione scripts de migração (Flyway/Liquibase) para facilitar deploy/controle de versão do esquema.
-- Testes: inclua ao menos alguns testes unitários para Services e um teste de integração simples para Controllers.
+São duas formas de garantir que frontend e backend conversem corretamente:
 
-Checklist sugerida antes da entrega
-- [X] Script SQL criado e testado no servidor `aula`.
-- [X] [application.properties.example](./backend/src/main/resources/application.properties) com placeholders incluído.
-- [x] README.md com instruções de execução e modelagem.
-- [x] Projeto rodando localmente (backend + frontend) sem erros.
+1) Ajustar `backend/src/main/resources/application.properties` para `server.port=8080` (se preferir manter frontend sem variáveis).
+2) Ou criar um arquivo `frontend/.env` com a linha:
+
+```
+VITE_API_BASE=http://localhost:8081
+```
+
+Recomendo criar `frontend/.env` apontando para a porta do backend definida em `application.properties`.
+
+## Como usar a aplicação pelo Frontend — passo a passo rápido
+
+1) Abra a interface no endereço que o Vite informar no terminal (normalmente `http://localhost:5173`).
+2) Cadastre um Customer (Clientes) — ir à página "Customers" → "Novo Cliente" → preencher nome, email, telefone → salvar.
+3) Cadastre Equipamentos (Equipments) — vá em "Equipamentos" → "Novo Equipamento" → selecione o Customer já cadastrado como owner e o tipo de equipamento (LAPTOP / DESKTOP / MONITOR).
+4) Cadastre Procedimentos (Procedures) — vá em "Procedures" → adicionar nome, descrição e preço.
+5) Cadastre Técnicos (Technicians) — vá em "Technicians" → adicionar nome.
+6) Crie uma Ordem de Serviço (Service Orders) — vá em "Service Orders" → novo chamado: selecione Technician, Equipment, marque os Procedures aplicáveis e selecione o status (ON_HOLD, IN_PROGRESS, AWAITING_PAYMENT, PAID, CANCELLED). Salve.
+7) Use listagens nas páginas para editar ou deletar registros (cada linha tem ações de editar/remover).
+
+Dica: crie primeiro Customer → Equipment → Technician/Procedure → ServiceOrder para evitar erros de referência (ServiceOrder precisa de IDs de Technician, Equipment e Procedure).
+
+## Documentação completa dos endpoints do backend (ponto-a-ponto)
+
+Base: o backend expõe endpoints com prefixo `/app/{resource}` e os caminhos são padronizados: `/select-all`, `/create`, `/update`, `/delete/{id}`.
+
+Nota: os exemplos abaixo usam `http://localhost:8081` como backend; ajuste para o que estiver em `application.properties` ou `VITE_API_BASE`.
+
+1) Customers
+- GET /app/customer/select-all
+  - Descrição: lista todos os customers.
+  - Retorno: array de objetos CustomerGetDTO
+  - Exemplo de resposta (200):
+
+```json
+[
+  { "id": 1, "name": "João Silva", "phoneNumber": "(31) 99999-0000", "email": "joao@example.com" }
+]
+```
+
+- POST /app/customer/create
+  - Descrição: cria um customer.
+  - Body (JSON) — `CustomerCreateDTO`:
+
+```json
+{
+  "name": "Maria Souza",
+  "email": "maria@example.com",
+  "phoneNumber": "(31) 98888-0000"
+}
+```
+
+  - Sucesso: retorna 201 e corpo com mensagem. Erros retornam 400.
+
+- PUT /app/customer/update
+  - Descrição: atualiza um customer existente.
+  - Body (JSON) — `CustomerUpdateDTO`:
+
+```json
+{
+  "id": 1,
+  "name": "Maria Souza Silva",
+  "email": "maria.silva@example.com",
+  "phoneNumber": "(31) 98888-0000"
+}
+```
+
+- DELETE /app/customer/delete/{id}
+  - Descrição: remove um customer por id.
+  - Exemplo: DELETE `/app/customer/delete/1`
+
+2) Equipments
+- GET /app/equipment/select-all
+  - Retorno: array `EquipmentGetDTO` com owner embutido (CustomerGetDTO).
+  - Exemplo de resposta:
+
+```json
+[
+  {
+    "id": 10,
+    "name": "Dell Inspiron",
+    "equipType": "LAPTOP",
+    "owner": { "id": 1, "name": "João Silva", "phoneNumber": "(31) 99999-0000", "email": "joao@example.com" }
+  }
+]
+```
+
+- POST /app/equipment/create
+  - Body (`EquipmentCreateDTO`):
+
+```json
+{
+  "name": "Dell Inspiron",
+  "customerId": 1,
+  "equipType": "LAPTOP"
+}
+```
+
+- PUT /app/equipment/update
+  - Body (`EquipmentUpdateDTO`):
+
+```json
+{
+  "id": 10,
+  "name": "Dell Inspiron 5000",
+  "customerId": 1,
+  "equipType": "LAPTOP"
+}
+```
+
+- DELETE /app/equipment/delete/{id}
+
+Observação: `equipType` aceita os valores do enum: `LAPTOP`, `DESKTOP`, `MONITOR`.
+
+3) Procedures
+- GET /app/procedure/select-all
+  - Retorna lista de `ProcedureGetDTO`.
+  - Exemplo de resposta:
+
+```json
+[
+  { "id": 100, "name": "Troca de HD", "description": "Substituição do HD por SSD", "price": 250.0 }
+]
+```
+
+- POST /app/procedure/create
+  - Body (`ProcedureCreateDTO`):
+
+```json
+{
+  "name": "Troca de HD",
+  "description": "Substituição do HD por SSD",
+  "price": 250.0
+}
+```
+
+- PUT /app/procedure/update
+  - Body (`ProcedureUpdateDTO`):
+
+```json
+{
+  "id": 100,
+  "name": "Troca de SSD",
+  "description": "Instalação de SSD",
+  "price": 300.0
+}
+```
+
+- DELETE /app/procedure/delete/{id}
+
+4) Technicians
+- GET /app/technician/select-all
+  - Retorna lista de `TechnicianGetDTO`.
+  - Exemplo:
+
+```json
+[
+  { "id": 5, "name": "Carlos Pereira" }
+]
+```
+
+- POST /app/technician/create
+  - Body (`TechnicianCreateDTO`):
+
+```json
+{
+  "name": "Carlos Pereira"
+}
+```
+
+- PUT /app/technician/update
+  - Body (`TechnicianUpdateDTO`):
+
+```json
+{
+  "id": 5,
+  "name": "Carlos P."
+}
+```
+
+- DELETE /app/technician/delete/{id}
+
+5) Service Orders (Ordens de Serviço)
+- GET /app/service-order/select-all
+  - Retorna lista de `ServiceOrderGetDTO`. Cada item retorna id, price, technician, equipment, procedures (lista) e status.
+  - Exemplo (simplificado):
+
+```json
+[
+  {
+    "id": 200,
+    "price": 550.0,
+    "technician": { "id": 5, "name": "Carlos Pereira" },
+    "equipment": { "id": 10, "name": "Dell Inspiron", "equipType": "LAPTOP", "owner": { "id": 1, "name": "João Silva", "phoneNumber": "(31) 99999-0000", "email": "joao@example.com" } },
+    "procedures": [ { "id": 100, "name": "Troca de HD", "description": "...", "price": 250.0 } ],
+    "serviceOrderStatus": "IN_PROGRESS"
+  }
+]
+```
+
+- POST /app/service-order/create
+  - Body (`ServiceOrderCreateDTO`):
+
+```json
+{
+  "technicianId": 5,
+  "equipmentId": 10,
+  "procedureIds": [100],
+  "serviceOrderStatus": "ON_HOLD"
+}
+```
+
+  - Nota: o backend calcula o `price` agregando os procedimentos associados — no DTO de criação o preço não é enviado.
+
+- PUT /app/service-order/update
+  - Body (`ServiceOrderUpdateDTO`): (mesma estrutura da criação, mas contém `id` no DTO de update)
+
+```json
+{
+  "id": 200,
+  "technicianId": 5,
+  "equipmentId": 10,
+  "procedureIds": [100, 101],
+  "serviceOrderStatus": "IN_PROGRESS"
+}
+```
+
+- DELETE /app/service-order/delete/{id}
+
+Enumerações importantes
+- `EquipType`: `LAPTOP`, `DESKTOP`, `MONITOR`
+- `ServiceOrderStatus`: `ON_HOLD`, `IN_PROGRESS`, `AWAITING_PAYMENT`, `PAID`, `CANCELLED`
+
+## Testes rápidos (curl / PowerShell)
+
+Exemplo — listar customers:
+
+```powershell
+curl.exe -Method Get http://localhost:8081/app/customer/select-all
+```
+
+Exemplo — criar procedimento (PowerShell + JSON):
+
+```powershell
+curl.exe -Method Post -Body '{"name":"Troca de HD","description":"...","price":250}' -Headers @{"Content-Type"="application/json"} http://localhost:8081/app/procedure/create
+```
+
+## Resumo das mudanças e verificação
+
+- Atualizei este `README.md` para incluir um método de execução automático via `start_app.bat`, instruções claras sobre porta/variáveis de ambiente, passo-a-passo de uso do frontend e documentação completa dos endpoints do backend com exemplos JSON. Os links para `backend/src/main/resources/application.properties` e `DatabaseCreationScript.sql` foram mantidos.
+
+Se quiser, eu posso:
+- Gerar um `frontend/.env.example` com `VITE_API_BASE` já apontando para o valor de `application.properties`.
+- Criar um `backend/src/main/resources/application.properties.example` com placeholders para não expor credenciais reais.
+
+— Fim da documentação atualizada —
