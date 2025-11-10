@@ -3,6 +3,7 @@ package com.jacare.onboardingsites.model;
 import jakarta.persistence.*;
 import lombok.*;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @Entity
@@ -30,9 +31,10 @@ public class Customer {
     @Column(nullable = false)
     private String phoneNumber;
 
-    @Column(nullable = false)
-    @OneToMany(cascade = CascadeType.ALL)
-    private List<Equipment> equipments;
+    // Um Customer possui vários Equipments. mappedBy aponta para o campo 'owner' em Equipment
+    @OneToMany(mappedBy = "owner", cascade = CascadeType.ALL, orphanRemoval = true)
+    @Builder.Default
+    private List<Equipment> equipments = new ArrayList<>();
 
     @Column(nullable = false)
     private Double debt;

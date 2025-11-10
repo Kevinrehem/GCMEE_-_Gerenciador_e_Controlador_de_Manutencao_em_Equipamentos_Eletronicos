@@ -3,8 +3,8 @@ package com.jacare.onboardingsites.model;
 import com.jacare.onboardingsites.model.enums.EquipType;
 import jakarta.persistence.*;
 import lombok.*;
-import org.springframework.data.annotation.Id;
-
+import java.util.ArrayList;
+import java.util.List;
 @Entity
 @Table(name = "equipments")
 @Getter
@@ -15,7 +15,6 @@ import org.springframework.data.annotation.Id;
 @EqualsAndHashCode(onlyExplicitlyIncluded = true)
 @ToString
 public class Equipment {
-    @jakarta.persistence.Id
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @EqualsAndHashCode.Include
@@ -26,8 +25,14 @@ public class Equipment {
     private String name;
 
     @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "customer_id")
     private Customer owner;
 
     @Column
     private EquipType type;
+
+    // Um Equipment pode ter várias ServiceOrders
+    @OneToMany(mappedBy = "equipment", cascade = CascadeType.ALL, orphanRemoval = true)
+    @Builder.Default
+    private List<ServiceOrder> serviceOrders = new ArrayList<>();
 }
