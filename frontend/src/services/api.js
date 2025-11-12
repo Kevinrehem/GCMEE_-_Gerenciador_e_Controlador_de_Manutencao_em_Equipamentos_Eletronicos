@@ -1,4 +1,4 @@
-const API_BASE = import.meta.env.VITE_API_BASE || 'http://localhost:8080';
+const API_BASE = import.meta.env.VITE_API_BASE || 'http://localhost:8081';
 
 async function http(path, { method = 'GET', data, headers } = {}) {
   const opts = { method, headers: { 'Content-Type': 'application/json', ...(headers || {}) } };
