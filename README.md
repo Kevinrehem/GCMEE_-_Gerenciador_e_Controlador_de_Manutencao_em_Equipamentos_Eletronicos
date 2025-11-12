@@ -4,18 +4,19 @@ O GCMEE é um sistema full-stack projetado para gerenciar o fluxo completo de ma
 
 ## 📖 Índice
 
-  * [Tecnologias Utilizadas](https://www.google.com/search?q=%23-tecnologias-utilizadas)
-  * [🚀 Instalação e Execução](https://www.google.com/search?q=%23-instala%C3%A7%C3%A3o-e-execu%C3%A7%C3%A3o)
-      * [Pré-requisitos](https://www.google.com/search?q=%23pr%C3%A9-requisitos)
-      * [Backend (Spring Boot)](https://www.google.com/search?q=%23backend-spring-boot)
-      * [Frontend (React + Vite)](https://www.google.com/search?q=%23frontend-react--vite)
-  * [🔌 Documentação da API (Endpoints)](https://www.google.com/search?q=%23-documenta%C3%A7%C3%A3o-da-api-endpoints)
-      * [Clientes (Customer)](https://www.google.com/search?q=%23clientes-customer)
-      * [Técnicos (Technician)](https://www.google.com/search?q=%23t%C3%A9cnicos-technician)
-      * [Equipamentos (Equipment)](https://www.google.com/search?q=%23equipamentos-equipment)
-      * [Procedimentos (Procedure)](https://www.google.com/search?q=%23procedimentos-procedure)
-      * [Ordens de Serviço (Service Order)](https://www.google.com/search?q=%23ordens-de-servi%C3%A7o-service-order)
-  * [💻 Manual de Uso (Frontend)](https://www.google.com/search?q=%23-manual-de-uso-frontend)
+  * [Tecnologias Utilizadas](#️-tecnologias-utilizadas)
+  * [🚀 Instalação e Execução](#-instalação-e-execução)
+      * [Pré-requisitos](#pré-requisitos)
+      * [Backend (Spring Boot)](#backend-spring-boot)
+      * [Frontend (React + Vite)](#frontend-react--vite)
+  * [💻 Manual de Uso (Frontend)](#-manual-de-uso-frontend)
+  * [🔌 Documentação da API (Endpoints)](#-documentação-da-api-endpoints)
+      * [Clientes (Customer)](#clientes-customer)
+      * [Técnicos (Technician)](#técnicos-technician)
+      * [Equipamentos (Equipment)](#equipamentos-equipment)
+      * [Procedimentos (Procedure)](#procedimentos-procedure)
+      * [Ordens de Serviço (Service Order)](#ordens-de-serviço-service-order)
+  
 
 -----
 
